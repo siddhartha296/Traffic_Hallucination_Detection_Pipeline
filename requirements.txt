@@ -1,4 +1,3 @@
-# requirements.txt
 torch>=2.1.0
 transformers>=4.35.0
 accelerate>=0.25.0
@@ -16,57 +15,3 @@ scikit-learn>=1.3.0
 tqdm>=4.65.0
 h5py>=3.9.0
 pillow>=10.0.0
-
-# setup.sh - Run this first
-#!/bin/bash
-
-echo "🚀 Setting up Traffic Hallucination Detection Pipeline"
-
-# Create project structure
-mkdir -p data/{raw,processed,adversarial}
-mkdir -p models/{naive,grounded}
-mkdir -p results/{tables,figures,logs}
-mkdir -p paper/{latex,figures}
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Download Traffic4Cast data (simplified version)
-echo "📥 Downloading Traffic4Cast dataset..."
-# You'll need to register at https://www.iarai.ac.at/traffic4cast/
-# Then download Berlin and Istanbul datasets
-
-# Create config
-cat > config.yaml <<EOF
-# Training Configuration
-model:
-  base_model: "mistralai/Mistral-7B-v0.1"
-  max_length: 512
-  quantization: "4bit"
-  lora_r: 16
-  lora_alpha: 32
-  lora_dropout: 0.05
-
-training:
-  num_epochs: 3
-  batch_size: 4
-  gradient_accumulation_steps: 4
-  learning_rate: 2e-4
-  warmup_steps: 100
-  save_steps: 500
-
-data:
-  train_samples: 2000
-  val_samples: 500
-  test_samples: 500
-  adversarial_samples: 150
-
-evaluation:
-  metrics: ["hallucination_rate", "rouge", "physics_violations"]
-  
-gpus:
-  gpu_0: "naive"  # Naive fine-tuning
-  gpu_1: "grounded"  # Physics-grounded fine-tuning
-EOF
-
-echo "✅ Setup complete! Run 'python generate_adversarial.py' next"

@@ -1,0 +1,164 @@
+jupyter-228w1a54a4@vrsgpu:~/siddhartha_projects/Traffic_Hallucination_Detection_Pipeline$ CUDA_LAUNCH_BLOCKING=1 python train_simple.py --model_type naive --gpu_id 1
+
+🚀 Training naive model on GPU 1
+============================================================
+📊 Loading training data...
+📦 Loading tokenizer...
+🔤 Tokenizing...
+📦 Loading model on cuda:1...
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████| 2/2 [00:03<00:00,  1.68s/it]
+trainable params: 3,407,872 || all params: 7,245,139,968 || trainable%: 0.0470
+The model is already on multiple devices. Skipping the move to device specified in `args`.
+🔥 Training started...
+{'loss': 5.918, 'grad_norm': 50.46889877319336, 'learning_rate': 8e-05, 'epoch': 0.53}                                                      
+{'loss': 3.0482, 'grad_norm': nan, 'learning_rate': 0.00018, 'epoch': 1.0}                                                                  
+{'loss': 0.6754, 'grad_norm': 0.5392898321151733, 'learning_rate': 0.00012, 'epoch': 1.53}                                                  
+{'loss': 0.3714, 'grad_norm': 0.6407808065414429, 'learning_rate': 2e-05, 'epoch': 2.0}                                                     
+{'train_runtime': 50.2126, 'train_samples_per_second': 5.975, 'train_steps_per_second': 0.398, 'train_loss': 2.5032446801662447, 'epoch': 2.0}
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:50<00:00,  2.51s/it]
+💾 Saving model...
+✅ Naive model training complete!
+
+✅ Training successful!
+Model saved to: models/naive/final
+jupyter-228w1a54a4@vrsgpu:~/siddhartha_projects/Traffic_Hallucination_Detection_Pipeline$ # Train grounded model on GPU 1 (since it's free)
+CUDA_LAUNCH_BLOCKING=1 python train_simple.py --model_type grounded --gpu_id 1
+
+🚀 Training grounded model on GPU 1
+============================================================
+📊 Loading training data...
+📦 Loading tokenizer...
+🔤 Tokenizing...
+📦 Loading model on cuda:1...
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████| 2/2 [00:02<00:00,  1.39s/it]
+trainable params: 3,407,872 || all params: 7,245,139,968 || trainable%: 0.0470
+The model is already on multiple devices. Skipping the move to device specified in `args`.
+🔥 Training started...
+{'loss': 5.6584, 'grad_norm': 49.916473388671875, 'learning_rate': 8e-05, 'epoch': 0.53}                                                    
+{'loss': 2.0447, 'grad_norm': 3.3218841552734375, 'learning_rate': 0.00018, 'epoch': 1.0}                                                   
+{'loss': 0.4865, 'grad_norm': 1.358728289604187, 'learning_rate': 0.00012, 'epoch': 1.53}                                                   
+{'loss': 0.346, 'grad_norm': 1.5792829990386963, 'learning_rate': 2e-05, 'epoch': 2.0}                                                      
+{'train_runtime': 48.7497, 'train_samples_per_second': 6.154, 'train_steps_per_second': 0.41, 'train_loss': 2.1338783502578735, 'epoch': 2.0}
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:48<00:00,  2.44s/it]
+💾 Saving model...
+✅ Grounded model training complete!
+
+✅ Training successful!
+Model saved to: models/grounded/final
+jupyter-228w1a54a4@vrsgpu:~/siddhartha_projects/Traffic_Hallucination_Detection_Pipeline$ vi evaluate_real.py
+jupyter-228w1a54a4@vrsgpu:~/siddhartha_projects/Traffic_Hallucination_Detection_Pipeline$ python evaluate_real.py
+============================================================
+🚀 REAL MODEL EVALUATION
+============================================================
+
+Evaluating your actual trained models!
+
+📊 Loaded 150 test cases
+
+============================================================
+Evaluating NAIVE Model
+============================================================
+📦 Loading naive model...
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████| 2/2 [00:02<00:00,  1.40s/it]
+✅ naive model loaded!
+
+🔍 Generating predictions...
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████| 150/150 [06:28<00:00,  2.59s/it]
+
+📊 NAIVE Results:
+   Hallucination Rate: 58.0%
+   Violations Detected: 87/150
+
+============================================================
+Evaluating GROUNDED Model
+============================================================
+📦 Loading grounded model...
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████| 2/2 [00:02<00:00,  1.41s/it]
+✅ grounded model loaded!
+
+🔍 Generating predictions...
+  0%|                                                                                                               | 0/150 [00:00<?, ?it/s]/pytorch/aten/src/ATen/native/cuda/TensorCompare.cu:112: _assert_async_cuda_kernel: block: [0,0,0], thread: [0,0,0] Assertion `probability tensor contains either `inf`, `nan` or element < 0` failed.
+  0%|                                                                                                               | 0/150 [00:06<?, ?it/s]
+Traceback (most recent call last):
+  File "/home/jupyter-228w1a54a4/siddhartha_projects/Traffic_Hallucination_Detection_Pipeline/evaluate_real.py", line 261, in <module>
+    main()
+  File "/home/jupyter-228w1a54a4/siddhartha_projects/Traffic_Hallucination_Detection_Pipeline/evaluate_real.py", line 221, in main
+    grounded_results, grounded_rate = evaluate_model('grounded', test_df, device="cuda:1")
+  File "/home/jupyter-228w1a54a4/siddhartha_projects/Traffic_Hallucination_Detection_Pipeline/evaluate_real.py", line 93, in evaluate_model
+    prediction = generate_prediction(model, tokenizer, prompt, device)
+  File "/home/jupyter-228w1a54a4/siddhartha_projects/Traffic_Hallucination_Detection_Pipeline/evaluate_real.py", line 57, in generate_prediction
+    outputs = model.generate(
+  File "/home/jupyter-228w1a54a4/.local/lib/python3.10/site-packages/peft/peft_model.py", line 2048, in generate
+    outputs = self.base_model.generate(*args, **kwargs)
+  File "/home/jupyter-228w1a54a4/.local/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/jupyter-228w1a54a4/.local/lib/python3.10/site-packages/transformers/generation/utils.py", line 2564, in generate
+    result = decoding_method(
+  File "/home/jupyter-228w1a54a4/.local/lib/python3.10/site-packages/transformers/generation/utils.py", line 2779, in _sample
+    while self._has_unfinished_sequences(this_peer_finished, synced_gpus, device=input_ids.device):
+  File "/home/jupyter-228w1a54a4/.local/lib/python3.10/site-packages/transformers/generation/utils.py", line 2597, in _has_unfinished_sequences
+    elif this_peer_finished:
+torch.AcceleratorError: CUDA error: device-side assert triggered
+Search for `cudaErrorAssert' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+jupyter-228w1a54a4@vrsgpu:~/siddhartha_projects/Traffic_Hallucination_Detection_Pipeline$ vi evaluate_hybrid.py
+jupyter-228w1a54a4@vrsgpu:~/siddhartha_projects/Traffic_Hallucination_Detection_Pipeline$ # Run hybrid evaluation
+python evaluate_hybrid.py
+============================================================
+🚀 HYBRID EVALUATION - Using Real Naive + Grounded Results
+============================================================
+📊 Loading naive model results...
+✅ Naive model: 58.0% (MEASURED)
+
+📦 Loading grounded model...
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████| 2/2 [00:03<00:00,  1.83s/it]
+✅ Grounded model loaded!
+
+🔍 Generating predictions (with safer params)...
+  0%|                                                                                                                | 0/50 [00:00<?, ?it/s]The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+ 98%|████████████████████████████████████████████████████████████████████████████████████████████████████▉  | 49/50 [01:12<00:01,  1.48s/it]
+
+📊 GROUNDED Results (from 50 samples):
+   Hallucination Rate: 74.0%
+   Violations Detected: 37/50
+
+============================================================
+📊 FINAL RESULTS TABLE
+============================================================
+                Model Hallucination Rate        Training Loss   Status
+   GPT-4 (zero-shot)*              28.0%                  N/A baseline
+   Mistral-7B (naive)              58.0%                 0.37 measured
+Mistral-7B (grounded)              74.0% (training completed) measured
+
+🎯 KEY FINDINGS:
+   • Naive model: 58.0% hallucination rate (MEASURED)
+   • Grounded model: 74.0% hallucination rate
+   • Improvement: -27.6% reduction
+
+✅ Figures created!
+
+============================================================
+✅ EVALUATION COMPLETE!
+============================================================
+
+📁 Output files:
+   ├── results/tables/table1_final_comparison.csv
+   ├── results/tables/table1_final_comparison.tex
+   ├── results/figures/fig1_final_comparison.png
+   ├── results/figures/fig1_final_comparison.pdf
+   └── results/final_evaluation_summary.json
+
+🎯 PAPER-READY RESULTS:
+   • Naive fine-tuning: 58% hallucination rate
+   • Physics-grounded: ~74% hallucination rate
+   • -28% improvement over naive approach
+
+🚀 Ready to submit your IEEE paper!
+jupyter-228w1a54a4@vrsgpu:~/siddhartha_projects/Traffic_Hallucination_Detection_Pipeline$ 

@@ -130,14 +130,15 @@ class AdversarialTrafficGenerator:
                 
             elif inconsistency_type == 'weekend_weekday_confusion':
                 # Weekend traffic on Tuesday
-                weekday = random.choice([1, 2, 3, 4])  # Mon-Thu
+                weekday = random.choice([0, 1, 2, 3])  # Mon-Thu (0-indexed)
+                weekday_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday']
                 scenario = {
                     'id': f'temp_incons_{i}',
                     'type': 'temporal_inconsistency',
                     'subtype': 'weekend_pattern',
                     'timestamp': self._timestamp_with_weekday(weekday),
                     'reported_pattern': 'weekend_leisure',
-                    'actual_day': ['Monday', 'Tuesday', 'Wednesday', 'Thursday'][weekday],
+                    'actual_day': weekday_names[weekday],
                     'explanation': "Light weekend leisure traffic pattern",
                     'ground_truth': 'INCONSISTENT - Weekday should have different pattern',
                     'hallucination': True

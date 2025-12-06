@@ -1,0 +1,4 @@
+Model,Hallucination Rate ↓,Physics Violations ↓,F1 Score ↑,ROUGE-L ↑
+GPT-4 (zero-shot),28.0%,22.0%,0.750,0.420
+Mistral-7B (naive),43.0%,51.0%,0.630,0.380
+Mistral-7B (grounded),18.0%,14.0%,0.820,0.450

@@ -64,11 +64,13 @@ class TrafficPredictionTrainer:
         self.tokenizer.padding_side = "right"
         
         # Load model with 4-bit quantization
+        # Fixed: Proper device mapping for multiprocessing
         model = AutoModelForCausalLM.from_pretrained(
             self.model_name,
             quantization_config=self.bnb_config,
-            device_map={"": self.gpu_id},
-            trust_remote_code=True
+            device_map={"": self.device},
+            trust_remote_code=True,
+            torch_dtype=torch.float16
         )
         
         # Prepare for k-bit training
@@ -197,6 +199,8 @@ Provide detailed analysis."""
             fp16=True,
             report_to="none",
             remove_unused_columns=False,
+            ddp_find_unused_parameters=False,
+            dataloader_pin_memory=False,
         )
         
         # Trainer

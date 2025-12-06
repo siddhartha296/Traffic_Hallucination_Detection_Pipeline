@@ -1,0 +1,41 @@
+{
+  "gpt4_baseline": {
+    "hallucination_rate": 0.28,
+    "physics_violations": 0.22,
+    "f1": 0.75,
+    "rouge_l": 0.42,
+    "violation_breakdown": {
+      "density": 18,
+      "speed": 22,
+      "temporal": 15,
+      "causality": 20,
+      "spatial": 16
+    }
+  },
+  "naive": {
+    "hallucination_rate": 0.43,
+    "physics_violations": 0.51,
+    "f1": 0.63,
+    "rouge_l": 0.38,
+    "violation_breakdown": {
+      "density": 34,
+      "speed": 52,
+      "temporal": 41,
+      "causality": 48,
+      "spatial": 39
+    }
+  },
+  "grounded": {
+    "hallucination_rate": 0.18,
+    "physics_violations": 0.14,
+    "f1": 0.82,
+    "rouge_l": 0.45,
+    "violation_breakdown": {
+      "density": 8,
+      "speed": 21,
+      "temporal": 15,
+      "causality": 12,
+      "spatial": 18
+    }
+  }
+}

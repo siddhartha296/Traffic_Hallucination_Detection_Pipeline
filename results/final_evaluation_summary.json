@@ -1,0 +1,15 @@
+{
+  "naive": {
+    "hallucination_rate": 0.58,
+    "violations_detected": 87,
+    "total_samples": 150
+  },
+  "grounded": {
+    "hallucination_rate": 0.74,
+    "violations_detected": 37,
+    "total_samples": 50,
+    "estimated_full_violations": 111.0
+  },
+  "improvement_percentage": -27.58620689655173,
+  "conclusion": "Physics-grounded reduces hallucinations by -27.6%"
+}
